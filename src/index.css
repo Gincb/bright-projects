@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F0EFEA;
+    --foreground: #E8E7E3;
+    --primary: #16453A;
+    --text: #333333;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text font-poppins;
+  }
+}
