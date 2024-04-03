@@ -84,7 +84,12 @@ export const GroupCard: FC<IGroupCard> = ({
           </p>
         </div>
       </div>
-      <PrimaryButton onClick={handleRedirect}>Read more</PrimaryButton>
+      <PrimaryButton
+        onClick={handleRedirect}
+        additionalClass="border-t-2 border-t-primary"
+      >
+        Read more
+      </PrimaryButton>
     </div>
   )
 }

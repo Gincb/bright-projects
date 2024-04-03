@@ -1,20 +1,16 @@
 import React, { ButtonHTMLAttributes, FC } from "react"
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-  maxWidth?: string
-  rounded?: boolean
+  additionalClass?: string
 }
 
 export const PrimaryButton: FC<IButton> = ({
   children,
-  maxWidth,
-  rounded = false,
+  additionalClass,
   ...props
 }) => (
   <button
-    className={`bg-primary border-t-2 border-t-primary duration-300 text-white font-semibold p-4 w-full hover:bg-white hover:text-primary transition-colors ${
-      rounded ?? "rounded-lg"
-    } max-w-[${maxWidth}]`}
+    className={`bg-primary duration-300 text-white font-semibold p-4 w-full hover:bg-white hover:text-primary transition-colors ${additionalClass}`}
     {...props}
   >
     {children}
