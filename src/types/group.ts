@@ -169,7 +169,7 @@ export interface IGroup {
   capacity: number
   min_start_places: number
   location: ILocation
-  payment_intervals: IPaymentIntervals
+  payment_intervals: Array<IPaymentIntervals>
   one_time_price: number
   price: number
   product: { id: number; provider_id: number; type: string }
