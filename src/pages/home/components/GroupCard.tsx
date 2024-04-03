@@ -1,8 +1,7 @@
-import React, { FC, useContext } from "react"
+import React, { FC } from "react"
 import { useNavigate } from "react-router-dom"
-import { UserContext } from "context/UserContext"
 import { IGroupDaysSchedule } from "types/group"
-import { DAYS_OF_WEEK, handleDateFormat } from "constants/general"
+import { handleDateFormat, handleScheduleFormat } from "constants/general"
 import { Routes } from "constants/routes"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { TagCapsule } from "./TagCapsule"
@@ -32,17 +31,16 @@ export const GroupCard: FC<IGroupCard> = ({
   city,
   image,
 }) => {
-  const { setSelectedGroup } = useContext(UserContext)
   const navigate = useNavigate()
 
   const handleRedirect = () => {
-    setSelectedGroup(externalKey)
+    localStorage.setItem("selectedGroup", externalKey)
     navigate(Routes.group)
   }
 
   return (
-    <div className="flex flex-col justify-between w-full max-w-[400px] border-2 border-primary rounded-3xl bg-white overflow-hidden">
-      <div className="flex flex-col items-start gap-y-2.5 relative h-[260px] p-4 md:p-6">
+    <div className="flex flex-col justify-between w-full max-w-[25rem] border-2 border-primary rounded-3xl bg-white overflow-hidden">
+      <div className="flex flex-col items-start gap-y-2.5 relative h-[16.25rem] p-4 md:p-6">
         <TagCapsule tag={ageGroup.join(", ")} icon="icons/child.svg" />
         <TagCapsule tag={level} icon="icons/level.svg" />
         <TagCapsule tag={city} icon="icons/location.svg" />
@@ -53,14 +51,14 @@ export const GroupCard: FC<IGroupCard> = ({
         />
       </div>
       <div className="p-4 md:p-6">
-        <p className="text-h2 mb-2.5">{name}</p>
+        <p className="text-h2-mob md:text-h2 mb-2.5">{name}</p>
         <p
-          className="text-ellipsis overflow-hidden h-[120px] line-clamp-5 mb-6"
+          className="text-body-mob md:text-body text-ellipsis overflow-hidden h-[6.5625rem] md:h-[7.5rem] line-clamp-5 mb-6"
           dangerouslySetInnerHTML={{ __html: description }}
         />
         <div className="flex flex-row items-start">
           <img src="/icons/calendar.svg" alt="calendar" />
-          <p className="ml-2">
+          <p className="text-body-mob md:text-body ml-2">
             Duration:{" "}
             <span className="text-primary font-semibold">
               {handleDateFormat(startDate)} - {handleDateFormat(endDate)}
@@ -69,17 +67,10 @@ export const GroupCard: FC<IGroupCard> = ({
         </div>
         <div className="flex flex-row items-start">
           <img src="/icons/clock.svg" alt="clock" />
-          <p className="ml-2">
+          <p className="text-body-mob md:text-body ml-2">
             Schedule:{" "}
             <span className="text-primary font-semibold">
-              {schedule?.map(
-                ({ day }, idx) =>
-                  `${DAYS_OF_WEEK[Number(day) - 1]}${
-                    idx < schedule.length - 1 ? ", " : ""
-                  }`
-              )}{" "}
-              | {schedule[0].start_time.slice(0, -3)} -
-              {schedule[0].end_time.slice(0, -3)}
+              {handleScheduleFormat(schedule)}
             </span>
           </p>
         </div>

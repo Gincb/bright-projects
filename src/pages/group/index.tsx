@@ -1,15 +1,64 @@
-import React, { useContext } from "react"
-import { UserContext } from "context/UserContext"
+import React from "react"
 import { useFetchData } from "hooks/useFetch"
-import { GROUP_APIS } from "constants/apis"
+import { BASE_URL, GROUP_APIS } from "constants/apis"
+import { IGroup } from "types/group"
+import { Loader } from "components/loader/Loader"
+import { Activity } from "./sections/Activity"
+import { handleDateFormat, handleScheduleFormat } from "constants/general"
 
 export const Group = () => {
-  const { selectedGroup } = useContext(UserContext)
-  // const { data: group, isLoading } = useFetchData(GROUP_APIS.PUBLISHED_GROUPS)
-  console.log(selectedGroup)
-  return (
+  const selectedGroup = localStorage.getItem("selectedGroup")
+  const { data: group, isLoading } = useFetchData(
+    GROUP_APIS.GROUP + selectedGroup
+  )
+
+  if (!group || isLoading) {
+    return <Loader />
+  }
+
+  const {
+    name,
+    age_groups,
+    difficulty_type,
+    start_date,
+    end_date,
+    group_days_schedule,
+    location,
+    provider,
+    activity,
+    payment_intervals,
+  }: IGroup = group
+
+  console.log(group)
+  return !isLoading && group ? (
     <>
-      <p className="text-h1-mob md:text-h1 my-4">Group activities</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 auto-rows-min overflow-hidden py-2 md:py-6">
+        {activity.images.map(({ id, path }, idx) => (
+          <img
+            key={id}
+            className={`${idx > 0 ? "hidden" : "block"} sm:block`}
+            src={BASE_URL + path}
+            alt="activity example"
+          />
+        ))}
+      </div>
+      <p className="text-h1-mob md:text-h1 my-4 md:my-6">{name}</p>
+      <div>
+        <Activity
+          ageGroup={age_groups.join(", ")}
+          level={difficulty_type.name}
+          duration={`${handleDateFormat(start_date)} - ${handleDateFormat(
+            end_date
+          )}`}
+          schedule={handleScheduleFormat(group_days_schedule)}
+          location={`${location.name}, ${location.city}, ${location.country}`}
+          phone={provider.phone}
+          email={provider.email}
+          description={activity.description}
+        />
+      </div>
     </>
+  ) : (
+    <Loader />
   )
 }
