@@ -5,6 +5,8 @@ import { IGroup } from "types/group"
 import { Loader } from "components/loader/Loader"
 import { Activity } from "./sections/Activity"
 import { handleDateFormat, handleScheduleFormat } from "constants/general"
+import { SubscriptionOptions } from "./sections/SubscriptionOptions"
+import { Subscription } from "./sections/Subscription"
 
 export const Group = () => {
   const selectedGroup = localStorage.getItem("selectedGroup")
@@ -29,7 +31,7 @@ export const Group = () => {
     payment_intervals,
   }: IGroup = group
 
-  console.log(group)
+  console.log(payment_intervals)
   return !isLoading && group ? (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-3 auto-rows-min overflow-hidden py-2 md:py-6">
@@ -43,7 +45,7 @@ export const Group = () => {
         ))}
       </div>
       <p className="text-h1-mob md:text-h1 my-4 md:my-6">{name}</p>
-      <div>
+      <div className="flex flex-col items-baseline md:flex-row gap-6 md:gap-8">
         <Activity
           ageGroup={age_groups.join(", ")}
           level={difficulty_type.name}
@@ -56,6 +58,7 @@ export const Group = () => {
           email={provider.email}
           description={activity.description}
         />
+        <Subscription paymentIntervals={payment_intervals} />
       </div>
     </>
   ) : (

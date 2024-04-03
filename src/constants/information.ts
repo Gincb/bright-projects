@@ -20,3 +20,14 @@ export const getGroupInformation = ({
   { icon: "/icons/phone.svg", name: "Phone", value: phone },
   { icon: "/icons/email.svg", name: "Email", value: email },
 ]
+
+export const PAYMENT_INFORMATION: {
+  [key: string]: { name: string; description: string; interval: string }
+} = {
+  "one-month": {
+    name: "Monthly payment",
+    description:
+      "Charged every month on the 3rd of the month. Initial payment is for 1 month upfront; subsequent payments are adjusted every month for the actual number of lessons.",
+    interval: "mon",
+  },
+}
