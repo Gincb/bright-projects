@@ -60,7 +60,10 @@ export const Group = () => {
           email={provider.email}
           description={activity.description}
         />
-        <Subscription paymentIntervals={payment_intervals} activity={product} />
+        <Subscription
+          paymentIntervals={payment_intervals}
+          activity={{ ...product, name, image: BASE_URL + activity.images[0].path }}
+        />
       </div>
     </>
   ) : (

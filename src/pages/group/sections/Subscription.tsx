@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react"
+import React, { FC, useContext, useId, useState } from "react"
 import { IPaymentIntervals } from "types/group"
 import { ModalContext } from "context/ModalContext"
 import { Storage } from "constants/data"
@@ -9,11 +9,13 @@ import { Participants } from "./Participants"
 interface ISubscription {
   paymentIntervals: Array<IPaymentIntervals>
   activity: {
+    name: string
     location: string
     duration: string
     schedule: string
     level: string
     ageGroup: string
+    image: string
   }
 }
 
@@ -30,6 +32,7 @@ export const Subscription: FC<ISubscription> = ({
     name: paymentIntervals[0]?.name,
     price: paymentIntervals[0]?.group_price,
   })
+  const uid = useId()
   const user = JSON.parse(localStorage.getItem(Storage.user) as string)
   const cart = JSON.parse(localStorage.getItem(Storage.cart) as string)
   const selectedGroup = localStorage.getItem(Storage.selectedGroup)
@@ -51,6 +54,7 @@ export const Subscription: FC<ISubscription> = ({
     }
     if (user && addedParticipants && selectedPayment) {
       const product = {
+        uid,
         activityInformation: { externalId: selectedGroup, ...activity },
         paymentMethod: selectedPayment,
         participants: addedParticipants,
@@ -59,6 +63,7 @@ export const Subscription: FC<ISubscription> = ({
         Storage.cart,
         JSON.stringify(cart?.length ? [...cart, product] : [{ ...product }])
       )
+      window !== undefined && window.dispatchEvent(new Event("storage"))
     }
   }
 
@@ -85,7 +90,16 @@ export const Subscription: FC<ISubscription> = ({
             />
           ))}
         </div>
+        <div className="flex flex-row justify-between items-center pt-4 md:pt-6 mt-4 md:mt-6 border-t-2 border-primary cursor-pointer transition-[opacity] duration-300 hover:opacity-70">
+          <p className="text-h2-mob md:text-h2 font-semibold">
+            Subtotal
+          </p>
+          <p className="text-h2-mob md:text-h2 font-semibold text-primary">
+            €{selectedPayment.price.toFixed(2) || 0}
+          </p>
+        </div>
       </div>
+
       <PrimaryButton
         additionalClass="border-t-2 border-t-primary disabled:opacity-50"
         onClick={handleOnclick}

@@ -42,19 +42,19 @@ export const GroupCard: FC<IGroupCard> = ({
   }
 
   return (
-    <div className="flex flex-col justify-between w-full max-w-[25rem] border-2 border-primary rounded-3xl bg-white overflow-hidden">
+    <div className="flex flex-col justify-between w-full max-w-[25rem] border-2 border-primary rounded-3xl overflow-hidden">
       <div className="flex flex-col items-start gap-y-2.5 relative h-[16.25rem] p-4 md:p-6">
         <TagCapsule tag={ageGroup.join(", ")} icon="icons/child.svg" />
         <TagCapsule tag={level} icon="icons/level.svg" />
         <TagCapsule tag={`${spotsLeft} spots left`} icon="icons/group.svg" />
         <TagCapsule tag={city} icon="icons/location.svg" />
         <img
-          className="absolute top-0 left-0 object-cover h-full w-full rounded-t-3xl"
+          className="absolute top-0 left-0 object-cover h-full w-full rounded-t-3xl -z-10"
           src={image}
           alt="activity example"
         />
       </div>
-      <div className="p-4 md:p-6">
+      <div className="p-4 md:p-6 bg-white">
         <p className="text-h2-mob md:text-h2 mb-2.5">{name}</p>
         <p
           className="text-body-mob md:text-body text-ellipsis overflow-hidden h-[6.5625rem] md:h-[7.5rem] line-clamp-5 mb-6"
