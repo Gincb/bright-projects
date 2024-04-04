@@ -7,7 +7,7 @@ interface ISubscriptionOptions {
   lessonCount: number
   userExists: boolean
   isActive: boolean
-  setSelectedPayment: Dispatch<SetStateAction<string>>
+  setSelectedPayment: Dispatch<SetStateAction<{ name: string; price: number }>>
 }
 
 export const SubscriptionOptions: FC<ISubscriptionOptions> = ({
@@ -23,19 +23,15 @@ export const SubscriptionOptions: FC<ISubscriptionOptions> = ({
       userExists ? "p-4 rounded-3xl border-2 border-primary" : "p-0 border-0"
     } ${isActive ? "bg-primary text-white" : ""}`}
   >
-    {isActive ? (
+    {userExists ? (
       <img
         className="cursor-pointer"
-        src="/icons/radio_active.svg"
+        src={isActive ? "/icons/radio_active.svg" : "/icons/radio_inactive.svg"}
         alt="radio active icon"
+        onClick={() => setSelectedPayment({ name, price })}
       />
     ) : (
-      <img
-        className="cursor-pointer"
-        src="/icons/radio_inactive.svg"
-        alt="radio active icon"
-        onClick={() => setSelectedPayment(name)}
-      />
+      <></>
     )}
     <div className={`${userExists ? "ml-4" : "ml-0"}`}>
       <p

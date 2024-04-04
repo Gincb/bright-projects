@@ -1,26 +1,55 @@
-import React, { FC, useContext, useEffect, useState } from "react"
+import React, { FC, useContext, useState } from "react"
 import { IPaymentIntervals } from "types/group"
 import { ModalContext } from "context/ModalContext"
 import { Storage } from "constants/data"
 import { SubscriptionOptions } from "./SubscriptionOptions"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { Participants } from "./Participants"
+import { useCartCount } from "hooks/useCartCount"
 
-export const Subscription: FC<{
+interface ISubscription {
   paymentIntervals: Array<IPaymentIntervals>
-}> = ({ paymentIntervals }) => {
+  activity: {
+    name: string
+    location: string
+    duration: string
+    schedule: string
+    level: string
+    ageGroup: string
+    image: string
+  }
+}
+
+export const Subscription: FC<ISubscription> = ({
+  paymentIntervals,
+  activity,
+}) => {
   const { setModalType, setModalOpen } = useContext(ModalContext)
+  const { count: currentCount } = useCartCount()
+  const [count, setCount] = useState(currentCount || 0)
   const [addedParticipants, setAddedParticipants] = useState<Array<string>>([])
-  const [selectedPayment, setSelectedPayment] = useState<string>(
-    "paymentIntervals[0].name"
-  )
+  const [selectedPayment, setSelectedPayment] = useState<{
+    name: string
+    price: number
+  }>({
+    name: paymentIntervals[0]?.name,
+    price: paymentIntervals[0]?.group_price,
+  })
+  const uid = crypto.randomUUID()
   const user = JSON.parse(localStorage.getItem(Storage.user) as string)
   const cart = JSON.parse(localStorage.getItem(Storage.cart) as string)
+  const selectedGroup = localStorage.getItem(Storage.selectedGroup)
 
   const getButtonCTA = () => {
     if (!user) return "Login to subscribe"
     if (!user.familyMembers) return "Add a participant"
-    return "Enroll student"
+    if (currentCount > count) {
+      setTimeout(() => {
+        setCount(currentCount)
+      }, 3000)
+      return "Activity added!"
+    }
+    return "Add to cart"
   }
 
   const handleOnclick = () => {
@@ -32,21 +61,23 @@ export const Subscription: FC<{
       setModalType("participant")
       setModalOpen(true)
     }
-  }
-
-  useEffect(() => {
-    localStorage.setItem(
-      Storage.cart,
-      JSON.stringify({
-        ...cart,
+    if (user && addedParticipants && selectedPayment) {
+      const product = {
+        uid,
+        activityInformation: { externalId: selectedGroup, ...activity },
         paymentMethod: selectedPayment,
         participants: addedParticipants,
-      })
-    )
-  }, [addedParticipants, cart, selectedPayment])
+      }
+      localStorage.setItem(
+        Storage.cart,
+        JSON.stringify(cart?.length ? [...cart, product] : [{ ...product }])
+      )
+      window !== undefined && window.dispatchEvent(new Event("storage"))
+    }
+  }
 
   return (
-    <div className="bg-white border-2 border-primary rounded-3xl overflow-hidden min-w-[18.75rem]">
+    <div className="bg-white border-2 border-primary rounded-3xl overflow-hidden min-w-[25rem]">
       <div className="py-4 md:py-6 px-6 md:px-8">
         {user && (
           <Participants
@@ -63,16 +94,27 @@ export const Subscription: FC<{
               price={group_price}
               lessonCount={lesson_count}
               userExists={Boolean(user)}
-              isActive={selectedPayment === name}
+              isActive={Boolean(user) && selectedPayment.name === name}
               setSelectedPayment={setSelectedPayment}
             />
           ))}
         </div>
+        <div className="flex flex-row justify-between items-center pt-4 md:pt-6 mt-4 md:mt-6 border-t-2 border-primary cursor-pointer transition-[opacity] duration-300 hover:opacity-70">
+          <p className="text-h2-mob md:text-h2 font-semibold">Subtotal</p>
+          <p className="text-h2-mob md:text-h2 font-semibold text-primary">
+            €{selectedPayment.price.toFixed(2) || 0}
+          </p>
+        </div>
       </div>
+
       <PrimaryButton
-        additionalClass="border-t-2 border-t-primary disabled:opacity-50"
+        additionalClass={`border-t-2 border-t-primary ${
+          currentCount > count
+            ? "disabled:opacity-90 disabled:hover:bg-primary"
+            : " disabled:opacity-50"
+        }`}
         onClick={handleOnclick}
-        disabled={!addedParticipants.length}
+        disabled={(user && !addedParticipants.length) || currentCount > count}
       >
         {getButtonCTA()}
       </PrimaryButton>

@@ -3,10 +3,11 @@ import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./index.css"
 import { Routes } from "constants/routes"
-import { Home } from "pages/home"
-import { Group } from "pages/group"
 import { PageLayout } from "layouts/PageLayout"
 import { ModalContextProvider } from "context/ModalContext"
+import { Home } from "pages/home"
+import { Group } from "pages/group"
+import { Cart } from "pages/cart"
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: Routes.group,
         element: <Group />,
+      },
+      {
+        path: Routes.cart,
+        element: <Cart />,
       },
     ],
   },
