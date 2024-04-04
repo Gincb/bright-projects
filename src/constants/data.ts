@@ -1,3 +1,9 @@
+export const Storage = {
+  selectedGroup: "selectedGroup",
+  user: "user",
+  cart: "cart",
+}
+
 export const BASE_URL = "https://dev-api.exoclass.com/"
 
 export const GROUP_APIS = {

@@ -1,15 +1,14 @@
 import React from "react"
 import { useFetchData } from "hooks/useFetch"
-import { BASE_URL, GROUP_APIS } from "constants/apis"
+import { BASE_URL, GROUP_APIS, Storage } from "constants/data"
 import { IGroup } from "types/group"
 import { Loader } from "components/loader/Loader"
 import { Activity } from "./sections/Activity"
 import { handleDateFormat, handleScheduleFormat } from "constants/general"
-import { SubscriptionOptions } from "./sections/SubscriptionOptions"
 import { Subscription } from "./sections/Subscription"
 
 export const Group = () => {
-  const selectedGroup = localStorage.getItem("selectedGroup")
+  const selectedGroup = localStorage.getItem(Storage.selectedGroup)
   const { data: group, isLoading } = useFetchData(
     GROUP_APIS.GROUP + selectedGroup
   )

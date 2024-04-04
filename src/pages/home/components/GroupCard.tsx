@@ -1,6 +1,7 @@
 import React, { FC } from "react"
 import { useNavigate } from "react-router-dom"
 import { IGroupDaysSchedule } from "types/group"
+import { Storage } from "constants/data"
 import { handleDateFormat, handleScheduleFormat } from "constants/general"
 import { Routes } from "constants/routes"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
@@ -34,7 +35,7 @@ export const GroupCard: FC<IGroupCard> = ({
   const navigate = useNavigate()
 
   const handleRedirect = () => {
-    localStorage.setItem("selectedGroup", externalKey)
+    localStorage.setItem(Storage.selectedGroup, externalKey)
     navigate(Routes.group)
   }
 
