@@ -68,7 +68,7 @@ export const Subscription: FC<ISubscription> = ({
   }
 
   return (
-    <div className="bg-white border-2 border-primary rounded-3xl overflow-hidden min-w-[18.75rem]">
+    <div className="bg-white border-2 border-primary rounded-3xl overflow-hidden min-w-[25rem]">
       <div className="py-4 md:py-6 px-6 md:px-8">
         {user && (
           <Participants
