@@ -30,8 +30,6 @@ export const Group = () => {
     payment_intervals,
   }: IGroup = group
 
-  // address duration schedule level agegroup
-
   const product = {
     location: `${location.name}, ${location.city}, ${location.country}`,
     duration: `${handleDateFormat(start_date)} - ${handleDateFormat(end_date)}`,

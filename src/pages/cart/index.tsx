@@ -30,7 +30,7 @@ export const Cart = () => {
         </PrimaryButton>
         <div className="flex flex-col md:flex-row justify-end items-end gap-4 md:gap-8 pt-8 mt-8">
           <p className="text-h2-mob md:text-h2 text-right">
-            Subtotal:{" "}
+            Total:{" "}
             <span className="text-primary">
               €
               {cartState
@@ -45,7 +45,7 @@ export const Cart = () => {
             </span>
           </p>
           <PrimaryButton additionalClass="max-w-full md:max-w-max rounded-lg">
-            Checkout
+            Subscribe
           </PrimaryButton>
         </div>
       </div>

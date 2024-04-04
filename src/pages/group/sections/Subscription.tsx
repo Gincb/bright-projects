@@ -5,6 +5,7 @@ import { Storage } from "constants/data"
 import { SubscriptionOptions } from "./SubscriptionOptions"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { Participants } from "./Participants"
+import { useCartCount } from "hooks/useCartCount"
 
 interface ISubscription {
   paymentIntervals: Array<IPaymentIntervals>
@@ -24,6 +25,8 @@ export const Subscription: FC<ISubscription> = ({
   activity,
 }) => {
   const { setModalType, setModalOpen } = useContext(ModalContext)
+  const { count: currentCount } = useCartCount()
+  const [count, setCount] = useState(currentCount || 0)
   const [addedParticipants, setAddedParticipants] = useState<Array<string>>([])
   const [selectedPayment, setSelectedPayment] = useState<{
     name: string
@@ -32,7 +35,7 @@ export const Subscription: FC<ISubscription> = ({
     name: paymentIntervals[0]?.name,
     price: paymentIntervals[0]?.group_price,
   })
-  const uid = useId()
+  const uid = crypto.randomUUID()
   const user = JSON.parse(localStorage.getItem(Storage.user) as string)
   const cart = JSON.parse(localStorage.getItem(Storage.cart) as string)
   const selectedGroup = localStorage.getItem(Storage.selectedGroup)
@@ -40,6 +43,12 @@ export const Subscription: FC<ISubscription> = ({
   const getButtonCTA = () => {
     if (!user) return "Login to subscribe"
     if (!user.familyMembers) return "Add a participant"
+    if (currentCount > count) {
+      setTimeout(() => {
+        setCount(currentCount)
+      }, 3000)
+      return "Activity added!"
+    }
     return "Add to cart"
   }
 
@@ -91,9 +100,7 @@ export const Subscription: FC<ISubscription> = ({
           ))}
         </div>
         <div className="flex flex-row justify-between items-center pt-4 md:pt-6 mt-4 md:mt-6 border-t-2 border-primary cursor-pointer transition-[opacity] duration-300 hover:opacity-70">
-          <p className="text-h2-mob md:text-h2 font-semibold">
-            Subtotal
-          </p>
+          <p className="text-h2-mob md:text-h2 font-semibold">Subtotal</p>
           <p className="text-h2-mob md:text-h2 font-semibold text-primary">
             €{selectedPayment.price.toFixed(2) || 0}
           </p>
@@ -101,9 +108,13 @@ export const Subscription: FC<ISubscription> = ({
       </div>
 
       <PrimaryButton
-        additionalClass="border-t-2 border-t-primary disabled:opacity-50"
+        additionalClass={`border-t-2 border-t-primary ${
+          currentCount > count
+            ? "disabled:opacity-90 disabled:hover:bg-primary"
+            : " disabled:opacity-50"
+        }`}
         onClick={handleOnclick}
-        disabled={user && !addedParticipants.length}
+        disabled={(user && !addedParticipants.length) || currentCount > count}
       >
         {getButtonCTA()}
       </PrimaryButton>

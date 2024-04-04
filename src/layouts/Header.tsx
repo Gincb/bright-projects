@@ -5,13 +5,13 @@ import { Routes } from "constants/routes"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { ModalContext } from "context/ModalContext"
 import { Storage } from "constants/data"
+import { useCartCount } from "hooks/useCartCount"
 
 export const Header = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const user = JSON.parse(localStorage.getItem(Storage.user) as string)
-  const cart = JSON.parse(localStorage.getItem(Storage.cart) as string)
-  const [count, setCount] = useState(cart?.length || 0)
+  const { count } = useCartCount()
   const { setModalType, setModalOpen } = useContext(ModalContext)
 
   const hideBackBtn = pathname === Routes.home
@@ -20,20 +20,6 @@ export const Header = () => {
     setModalType("login")
     setModalOpen(true)
   }
-  useEffect(() => {
-    const listenStorageChange = () => {
-      if (!localStorage.getItem(Storage.cart)) {
-        setCount(0)
-      } else {
-        setCount(
-          JSON.parse(localStorage.getItem(Storage.cart) as string).length
-        )
-      }
-    }
-    window.addEventListener("storage", listenStorageChange)
-    return () =>
-      window.removeEventListener("storage", () => listenStorageChange)
-  }, [])
 
   return (
     <div className="bg-foreground">
