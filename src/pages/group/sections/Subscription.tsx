@@ -1,4 +1,4 @@
-import React, { FC, useContext, useId, useState } from "react"
+import React, { FC, useContext, useState } from "react"
 import { IPaymentIntervals } from "types/group"
 import { ModalContext } from "context/ModalContext"
 import { Storage } from "constants/data"

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Container } from "../components/wrappers/Container"
 import { Routes } from "constants/routes"
