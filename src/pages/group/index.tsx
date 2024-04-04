@@ -5,7 +5,6 @@ import { IGroup } from "types/group"
 import { Loader } from "components/loader/Loader"
 import { Activity } from "./sections/Activity"
 import { handleDateFormat, handleScheduleFormat } from "constants/general"
-import { SubscriptionOptions } from "./sections/SubscriptionOptions"
 import { Subscription } from "./sections/Subscription"
 
 export const Group = () => {

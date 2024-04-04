@@ -1,5 +1,10 @@
 import { IGroupDaysSchedule } from "types/group"
 
+export const TEST_USER = {
+  firstName: "John",
+  lastName: "Smith",
+}
+
 export const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
 export const handleDateFormat = (date: string) =>

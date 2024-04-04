@@ -7,6 +7,7 @@ import { Routes } from "constants/routes"
 import { Home } from "pages/home"
 import { Group } from "pages/group"
 import { PageLayout } from "layouts/PageLayout"
+import { ModalContextProvider } from "context/ModalContext"
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,9 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <RouterProvider router={router} />
+      <ModalContextProvider>
+        <RouterProvider router={router} />
+      </ModalContextProvider>
     </UserContextProvider>
   </React.StrictMode>
 )

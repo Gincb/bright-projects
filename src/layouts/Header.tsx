@@ -4,13 +4,20 @@ import { Container } from "../components/wrappers/Container"
 import { Routes } from "constants/routes"
 import { UserContext } from "context/UserContext"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
+import { ModalContext } from "context/ModalContext"
 
 export const Header = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { user } = useContext(UserContext)
+  const { setModalType, setModalOpen } = useContext(ModalContext)
 
   const hideBackBtn = pathname === Routes.home
+
+  const handleOnclick = () => {
+    setModalType("login")
+    setModalOpen(true)
+  }
 
   return (
     <div className="bg-foreground">
@@ -31,7 +38,10 @@ export const Header = () => {
           )}
 
           {!user && (
-            <PrimaryButton additionalClass="rounded-lg max-w-[7.875rem]">
+            <PrimaryButton
+              additionalClass="rounded-lg max-w-[7.875rem]"
+              onClick={handleOnclick}
+            >
               Login
             </PrimaryButton>
           )}

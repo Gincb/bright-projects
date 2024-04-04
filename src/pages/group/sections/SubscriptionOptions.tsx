@@ -12,7 +12,7 @@ export const SubscriptionOptions: FC<ISubscriptionoptions> = ({
   price,
   lessonCount,
 }) => (
-  <div className="min-w-[18.75rem]">
+  <div>
     <p className="text-body-mob md:text-body text-primary font-semibold mb-2.5">
       {PAYMENT_INFORMATION[name].name ?? name}
     </p>
