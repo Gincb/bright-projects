@@ -10,7 +10,7 @@ export const PrimaryButton: FC<IButton> = ({
   ...props
 }) => (
   <button
-    className={`bg-primary duration-300 text-white font-semibold p-4 w-full hover:bg-white hover:text-primary disabled:hover:bg-primary disabled:hover:text-white transition-colors ${additionalClass}`}
+    className={`bg-primary duration-300 text-white font-semibold p-4 w-full hover:bg-white hover:text-primary disabled:hover:bg-primary disabled:hover:text-white transition-all ${additionalClass}`}
     {...props}
   >
     {children}
