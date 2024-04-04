@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react"
+import React, { FC, useContext, useState } from "react"
 import { IPaymentIntervals } from "types/group"
 import { ModalContext } from "context/ModalContext"
 import { Storage } from "constants/data"
@@ -6,21 +6,38 @@ import { SubscriptionOptions } from "./SubscriptionOptions"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { Participants } from "./Participants"
 
-export const Subscription: FC<{
+interface ISubscription {
   paymentIntervals: Array<IPaymentIntervals>
-}> = ({ paymentIntervals }) => {
+  activity: {
+    location: string
+    duration: string
+    schedule: string
+    level: string
+    ageGroup: string
+  }
+}
+
+export const Subscription: FC<ISubscription> = ({
+  paymentIntervals,
+  activity,
+}) => {
   const { setModalType, setModalOpen } = useContext(ModalContext)
   const [addedParticipants, setAddedParticipants] = useState<Array<string>>([])
-  const [selectedPayment, setSelectedPayment] = useState<string>(
-    "paymentIntervals[0].name"
-  )
+  const [selectedPayment, setSelectedPayment] = useState<{
+    name: string
+    price: number
+  }>({
+    name: paymentIntervals[0]?.name,
+    price: paymentIntervals[0]?.group_price,
+  })
   const user = JSON.parse(localStorage.getItem(Storage.user) as string)
   const cart = JSON.parse(localStorage.getItem(Storage.cart) as string)
+  const selectedGroup = localStorage.getItem(Storage.selectedGroup)
 
   const getButtonCTA = () => {
     if (!user) return "Login to subscribe"
     if (!user.familyMembers) return "Add a participant"
-    return "Enroll student"
+    return "Add to cart"
   }
 
   const handleOnclick = () => {
@@ -32,18 +49,18 @@ export const Subscription: FC<{
       setModalType("participant")
       setModalOpen(true)
     }
-  }
-
-  useEffect(() => {
-    localStorage.setItem(
-      Storage.cart,
-      JSON.stringify({
-        ...cart,
+    if (user && addedParticipants && selectedPayment) {
+      const product = {
+        activityInformation: { externalId: selectedGroup, ...activity },
         paymentMethod: selectedPayment,
         participants: addedParticipants,
-      })
-    )
-  }, [addedParticipants, cart, selectedPayment])
+      }
+      localStorage.setItem(
+        Storage.cart,
+        JSON.stringify(cart?.length ? [...cart, product] : [{ ...product }])
+      )
+    }
+  }
 
   return (
     <div className="bg-white border-2 border-primary rounded-3xl overflow-hidden min-w-[18.75rem]">
@@ -63,7 +80,7 @@ export const Subscription: FC<{
               price={group_price}
               lessonCount={lesson_count}
               userExists={Boolean(user)}
-              isActive={selectedPayment === name}
+              isActive={Boolean(user) && selectedPayment.name === name}
               setSelectedPayment={setSelectedPayment}
             />
           ))}
@@ -72,7 +89,7 @@ export const Subscription: FC<{
       <PrimaryButton
         additionalClass="border-t-2 border-t-primary disabled:opacity-50"
         onClick={handleOnclick}
-        disabled={!addedParticipants.length}
+        disabled={user && !addedParticipants.length}
       >
         {getButtonCTA()}
       </PrimaryButton>

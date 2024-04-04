@@ -16,6 +16,7 @@ interface IGroupCard {
   schedule: Array<IGroupDaysSchedule>
   ageGroup: Array<Number>
   level: string
+  spotsLeft: number
   city: string
   image: string
 }
@@ -29,6 +30,7 @@ export const GroupCard: FC<IGroupCard> = ({
   schedule,
   ageGroup,
   level,
+  spotsLeft,
   city,
   image,
 }) => {
@@ -44,6 +46,7 @@ export const GroupCard: FC<IGroupCard> = ({
       <div className="flex flex-col items-start gap-y-2.5 relative h-[16.25rem] p-4 md:p-6">
         <TagCapsule tag={ageGroup.join(", ")} icon="icons/child.svg" />
         <TagCapsule tag={level} icon="icons/level.svg" />
+        <TagCapsule tag={`${spotsLeft} spots left`} icon="icons/group.svg" />
         <TagCapsule tag={city} icon="icons/location.svg" />
         <img
           className="absolute top-0 left-0 object-cover h-full w-full rounded-t-3xl"

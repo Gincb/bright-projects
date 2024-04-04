@@ -14,6 +14,8 @@ export const GroupList: FC<{ groups: Array<IGroup> | null }> = ({ groups }) => (
         group_days_schedule,
         age_groups,
         difficulty_type,
+        capacity,
+        attendees,
         location,
         image,
       }) => (
@@ -27,6 +29,7 @@ export const GroupList: FC<{ groups: Array<IGroup> | null }> = ({ groups }) => (
           schedule={group_days_schedule}
           ageGroup={age_groups}
           level={difficulty_type.name}
+          spotsLeft={capacity - attendees || 0}
           city={location.city}
           image={image}
         />

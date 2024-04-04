@@ -30,7 +30,16 @@ export const Group = () => {
     payment_intervals,
   }: IGroup = group
 
-  console.log(payment_intervals)
+  // address duration schedule level agegroup
+
+  const product = {
+    location: `${location.name}, ${location.city}, ${location.country}`,
+    duration: `${handleDateFormat(start_date)} - ${handleDateFormat(end_date)}`,
+    schedule: handleScheduleFormat(group_days_schedule),
+    level: difficulty_type.name,
+    ageGroup: age_groups.join(", "),
+  }
+
   return !isLoading && group ? (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-3 auto-rows-min overflow-hidden py-2 md:py-6">
@@ -46,18 +55,12 @@ export const Group = () => {
       <p className="text-h1-mob md:text-h1 my-4 md:my-6">{name}</p>
       <div className="flex flex-col items-baseline md:flex-row gap-6 md:gap-8">
         <Activity
-          ageGroup={age_groups.join(", ")}
-          level={difficulty_type.name}
-          duration={`${handleDateFormat(start_date)} - ${handleDateFormat(
-            end_date
-          )}`}
-          schedule={handleScheduleFormat(group_days_schedule)}
-          location={`${location.name}, ${location.city}, ${location.country}`}
+          {...product}
           phone={provider.phone}
           email={provider.email}
           description={activity.description}
         />
-        <Subscription paymentIntervals={payment_intervals} />
+        <Subscription paymentIntervals={payment_intervals} activity={product} />
       </div>
     </>
   ) : (
