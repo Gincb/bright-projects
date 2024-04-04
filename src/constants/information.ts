@@ -30,4 +30,10 @@ export const PAYMENT_INFORMATION: {
       "Charged every month on the 3rd of the month. Initial payment is for 1 month upfront; subsequent payments are adjusted every month for the actual number of lessons.",
     interval: "mon",
   },
+  quarterly: {
+    name: "Quarterly payment",
+    description:
+      "Charged every 3 months on the 3rd of the month. Initial payment is for 3 months upfront; subsequent payments are adjusted every 3 months for the actual number of lessons.",
+    interval: "3 months",
+  },
 }

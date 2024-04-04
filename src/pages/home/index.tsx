@@ -1,6 +1,6 @@
 import React from "react"
 import { GroupList } from "./sections/GroupList"
-import { GROUP_APIS } from "constants/apis"
+import { GROUP_APIS } from "constants/data"
 import { useFetchData } from "hooks/useFetch"
 import { Loader } from "components/loader/Loader"
 

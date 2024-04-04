@@ -1,18 +1,18 @@
 import React, { useContext, useState } from "react"
 import { useForm } from "react-hook-form"
 import { ModalContext } from "context/ModalContext"
-import { UserContext } from "context/UserContext"
 import { useDisableBackScroll } from "hooks/useDisableScroll"
 import { TEST_USER } from "constants/general"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
+import { Storage } from "constants/data"
 
 export const LoginModal = () => {
   const { modalType, setModalType, modalOpen, setModalOpen } =
     useContext(ModalContext)
-  const { setUser } = useContext(UserContext)
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm()
   const [showIncorrectLogin, setShowIncorrectLogin] = useState(false)
@@ -21,6 +21,12 @@ export const LoginModal = () => {
 
   if (!modalOpen || modalType !== "login") return <></>
 
+  const handleClose = () => {
+    setModalOpen(false)
+    setModalType(null)
+    reset()
+  }
+
   const onSubmit = (data: any) => {
     if (
       data.email !== process.env.REACT_APP_TEST_USER_EMAIL ||
@@ -28,18 +34,24 @@ export const LoginModal = () => {
     ) {
       setShowIncorrectLogin(true)
     } else {
-      setUser(TEST_USER)
-      setModalOpen(false)
-      setModalType(null)
+      localStorage.setItem(Storage.user, JSON.stringify(TEST_USER))
+      handleClose()
     }
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
-      <div className="bg-white border-2 border-primary rounded-3xl max-w-full md:max-w-[25rem] w-full py-4 px-6 md:py-6 md:px-8">
-        <p className="text-h2-mob md:text-h2 text-primary mb-6">
-          Welcome back!
-        </p>
+    <div className="flex items-center justify-center fixed top-0 left-0 w-full h-full">
+      <div
+        className="fixed top-0 left-0 z-40 w-full h-full bg-black/50"
+        onClick={handleClose}
+      />
+      <div className="bg-white border-2 border-primary rounded-3xl max-w-full md:max-w-[25rem] w-full py-4 px-6 md:py-6 md:px-8 z-50">
+        <div className="flex flex-row justify-between items-center mb-6">
+          <p className="text-h2-mob md:text-h2 text-primary">Welcome back!</p>
+          <div className="cursor-pointer" onClick={handleClose}>
+            <img src="/icons/close.svg" alt="close icon" />
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-6">
             <label className="block text-h3-mob md:text-h3 font-semibold mb-2">
@@ -50,7 +62,10 @@ export const LoginModal = () => {
               id="email"
               type="email"
               placeholder="Email address"
-              {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+              {...register("email", {
+                required: true,
+                pattern: /^\S+@\S+$/i,
+              })}
             />
             {errors.email && (
               <p className="text-body-mob text-red-500 mt-2">

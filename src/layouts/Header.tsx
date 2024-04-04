@@ -2,14 +2,14 @@ import React, { useContext } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Container } from "../components/wrappers/Container"
 import { Routes } from "constants/routes"
-import { UserContext } from "context/UserContext"
 import { PrimaryButton } from "components/buttons/PrimaryButton"
 import { ModalContext } from "context/ModalContext"
+import { Storage } from "constants/data"
 
 export const Header = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { user } = useContext(UserContext)
+  const user = JSON.parse(localStorage.getItem(Storage.user) as string)
   const { setModalType, setModalOpen } = useContext(ModalContext)
 
   const hideBackBtn = pathname === Routes.home
